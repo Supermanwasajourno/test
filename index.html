@@ -3,18 +3,41 @@
 <head>
   <meta charset="utf-8">
   <title>Демо мобильного Tazabek</title>
-  <!-- Масштабирование, чтобы SVG занимал весь экран на мобильных устройствах -->
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Стандартная метатег для адаптивной вёрстки -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* Убираем отступы и заставляем объект-вставку растянуться на всю высоту */
-    html,body{height:100%;margin:0}
-    object{width:100%;height:100%;border:0}
+    /* Сбрасываем отступы и растягиваем html/body на весь экран */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Контейнер-флекс: центр по горизонтали, скролл по вертикали */
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* сверху, чтобы изображение не “прыгало” */
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;        /* появится полоска, если макет выше 100vh */
+      background: #ffffff;
+    }
+
+    /* SVG как картинка: ширина 100 %, высота автоматически считает аспект */
+    .wrapper img {
+      width: 100%;    /* растягиваемся на всю доступную ширину */
+      height: auto;   /* браузер сам пересчитает высоту */
+      max-width: 1928px; /* не расширяться больше исходного размера */
+      display: block;    /* убираем лишний «нижний» пробел inline-картинок */
+    }
   </style>
 </head>
 <body>
-  <!-- Safari корректно рендерит SVG внутри <object> -->
-  <object type="image/svg+xml" data="mobile_tazabek.svg">
-    Ваш браузер не поддерживает SVG.
-  </object>
+  <div class="wrapper">
+    <!-- Просто меняйте имя файла, если переименуете SVG -->
+    <img src="mobile_tazabek.svg" alt="Демонстрационная версия Tazabek">
+  </div>
 </body>
 </html>

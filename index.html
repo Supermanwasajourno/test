@@ -3,41 +3,40 @@
 <head>
   <meta charset="utf-8">
   <title>Демо мобильного Tazabek</title>
-  <!-- Стандартная метатег для адаптивной вёрстки -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    /* Сбрасываем отступы и растягиваем html/body на весь экран */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Контейнер-флекс: центр по горизонтали, скролл по вертикали */
-    .wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start; /* сверху, чтобы изображение не “прыгало” */
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;        /* появится полоска, если макет выше 100vh */
-      background: #ffffff;
-    }
-
-    /* SVG как картинка: ширина 100 %, высота автоматически считает аспект */
-    .wrapper img {
-      width: 100%;    /* растягиваемся на всю доступную ширину */
-      height: auto;   /* браузер сам пересчитает высоту */
-      max-width: 1928px; /* не расширяться больше исходного размера */
-      display: block;    /* убираем лишний «нижний» пробел inline-картинок */
+    html,body{margin:0;height:100%;width:100%}
+    /* Масштабируем контейнер <object> вектора, а не его растр */
+    #svgWrap{
+      width:100%;
+      height:auto;        /* сохраняет пропорции */
+      max-width:1928px;   /* не больше исходного холста */
+      border:0;
+      display:block;
+      /* GPU-рендеринг → чёткий текст в Safari */
+      -webkit-transform:translate3d(0,0,0);
     }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <!-- Просто меняйте имя файла, если переименуете SVG -->
-    <img src="mobile_tazabek.svg" alt="Демонстрационная версия Tazabek">
-  </div>
+  <!-- Safari рендерит SVG как вектор, не растр -->
+  <object id="svgWrap"
+          type="image/svg+xml"
+          data="mobile_tazabek.svg">
+    Ваш браузер не поддерживает SVG.
+  </object>
+
+  <!-- По готовности правим сам SVG: тонкая настройка рендера -->
+  <script>
+    document.getElementById('svgWrap').addEventListener('load', function () {
+      const svg = this.contentDocument &&
+                  this.contentDocument.querySelector('svg');
+      if (svg){
+        svg.style.textRendering  = 'geometricPrecision'; // чёткие глифы
+        svg.style.shapeRendering = 'geometricPrecision';
+        svg.style['-webkit-transform'] = 'translate3d(0,0,0)';
+      }
+    });
+  </script>
 </body>
 </html>
